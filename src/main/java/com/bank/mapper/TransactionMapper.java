@@ -11,7 +11,7 @@ import com.bank.model.Transaction;
 
 @Component
 public class TransactionMapper {
-
+    
     public TransactionResponseDTO toDTO(Transaction transaction) {
         if (transaction == null) return null;
         
@@ -23,7 +23,7 @@ public class TransactionMapper {
         dto.setTransactionDate(transaction.getTransactionDate());
         return dto;
     }
-
+    
     public Transaction toEntity(TransactionRequestDTO dto) {
         if (dto == null) return null;
         

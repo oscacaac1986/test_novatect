@@ -34,7 +34,7 @@ public class Transaction {
     private String cardId;
 
     @Column(name = "price", nullable = false)
-    private Double price;
+    private Double price;  // Cambiado de amount a price para mantener consistencia
 
     @Column(name = "transaction_date", nullable = false)
     private LocalDateTime transactionDate;

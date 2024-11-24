@@ -1,0 +1,240 @@
+{
+	"info": {
+		"_postman_id": "4838d533-f938-42fa-8453-101287f657f5",
+		"name": "Bank Api",
+		"description": "\\# API Sistema de Tarjetas Bancarias\n\n\\## Descripción General  \nEsta colección contiene todos los endpoints necesarios para gestionar tarjetas bancarias y sus transacciones. El sistema permite crear tarjetas, realizar operaciones de saldo y procesar transacciones.\n\n\\## Configuración Inicial  \n1\\. **Variables de Entorno**  \n\\- \\`url\\`: [http://localhost:8080](http://localhost:8080)  \n\\- \\`cardId\\`: ID de la tarjeta para pruebas  \n\\- \\`transactionId\\`: ID de transacción para pruebas\n\n2\\. **Headers Globales**  \n\\`\\`\\`  \nContent-Type: application/json  \n\\`\\`\\`\n\n\\## Flujo Principal de Pruebas  \n1\\. Generar nueva tarjeta  \n2\\. Activar la tarjeta  \n3\\. Recargar saldo  \n4\\. Realizar compra  \n5\\. Verificar transacción\n\n\\### Gestión de Tarjetas  \n1\\. **Generar Número de Tarjeta**  \n\\- Método: GET  \n\\- URL: {{url}}/card/{productId}/number  \n\\- Descripción: Genera un nuevo número de tarjeta basado en el ID del producto  \n\\- Ejemplo productId: 123456\n\n2\\. **Activar Tarjeta**  \n\\- Método: POST  \n\\- URL: {{url}}/card/enroll  \n\\- Body:  \n\\`\\`\\`json  \n{  \n\"cardId\": \"1234567890123456\"  \n}  \n\\`\\`\\`\n\n3\\. **Bloquear Tarjeta**  \n\\- Método: DELETE  \n\\- URL: {{url}}/card/{cardId}  \n\\- Nota: Bloquea permanentemente una tarjeta\n\n4\\. **Recargar Saldo**  \n\\- Método: POST  \n\\- URL: {{url}/card/balance  \n\\- Body:  \n\\`\\`\\`json  \n{  \n\"cardId\": \"1234567890123456\",  \n\"balance\": 1000.00  \n}  \n\\`\\`\\`\n\n5\\. **Consultar Saldo**  \n\\- Método: GET  \n\\- URL: {{url}}/card/balance/{cardId}\n\n\\### Gestión de Transacciones  \n1\\. **Realizar Compra**  \n\\- Método: POST  \n\\- URL: {{url}}/transaction/purchase  \n\\- Body:  \n\\`\\`\\`json  \n{  \n\"cardId\": \"1234567890123456\",  \n\"price\": 100.00  \n}  \n\\`\\`\\`  \n\\- Validaciones:  \n\\* Saldo suficiente  \n\\* Tarjeta activa  \n\\* Tarjeta no bloqueada  \n\\* Fecha de vencimiento válida\n\n2\\. **Consultar Transacción**  \n\\- Método: GET  \n\\- URL: {{url}}/transaction/{transactionId}\n\n3\\. **Anular Transacción**  \n\\- Método: POST  \n\\- URL: {{url}}/transaction/anulation  \n\\- Body:  \n\\`\\`\\`json  \n{  \n\"cardId\": \"1234567890123456\",  \n\"transactionId\": \"abc123\"  \n}  \n\\`\\`\\`  \n\\- Restricciones:  \n\\* Solo dentro de las primeras 24 horas  \n\\* La transacción debe estar completada\n\n\\## Códigos de Respuesta  \n\\- 200: Operación exitosa  \n\\- 400: Error en la solicitud  \n\\- 404: Recurso no encontrado  \n\\- 500: Error interno del servidor\n\n\\## Guía de Pruebas  \n1\\. **Crear y Activar Tarjeta**  \n\\`\\`\\`  \n1\\. Generar número de tarjeta  \n2\\. Guardar el cardId retornado  \n3\\. Activar la tarjeta usando el cardId  \n\\`\\`\\`\n\n2\\. **Proceso de Compra**  \n\\`\\`\\`  \n1\\. Recargar saldo  \n2\\. Verificar saldo  \n3\\. Realizar compra  \n4\\. Verificar transacción  \n5\\. Comprobar nuevo saldo  \n\\`\\`\\`\n\n3\\. **Proceso de Anulación**  \n\\`\\`\\`  \n1\\. Realizar una compra  \n2\\. Guardar el transactionId  \n3\\. Ejecutar anulación  \n4\\. Verificar saldo actualizado  \n\\`\\`\\`\n\n\\## Notas Importantes  \n\\- Todas las operaciones monetarias son en dólares  \n\\- Las tarjetas tienen una validez de 3 años desde su creación  \n\\- Las anulaciones solo son posibles dentro de las primeras 24 horas  \n\\- El saldo no puede ser negativo\n\n\\## Recomendaciones  \n1\\. Usar las variables de entorno para facilitar las pruebas  \n2\\. Verificar el saldo antes y después de cada transacción  \n3\\. Probar los casos de error (saldo insuficiente, tarjeta bloqueada, etc.)  \n4\\. Documentar cualquier error encontrado con el ID de transacción correspondienteEndFragment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11537071"
+	},
+	"item": [
+		{
+			"name": "Card",
+			"item": [
+				{
+					"name": "Generar una tarjeta nueva",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/card/123456/number",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"card",
+								"123456",
+								"number"
+							]
+						},
+						"description": "Este metodo permite generar una tarjeta nueva"
+					},
+					"response": []
+				},
+				{
+					"name": "Activar tarjeta",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cardId\": \"1234567403476912\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/card/enroll",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"card",
+								"enroll"
+							]
+						},
+						"description": "Metodo que permite activar una tarjeta anteriormente generada"
+					},
+					"response": []
+				},
+				{
+					"name": "Bloquear Tarjeta",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/card/1234567890123456",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"card",
+								"1234567890123456"
+							]
+						},
+						"description": "Metodo que permite el bloqueo de una tarjeta"
+					},
+					"response": []
+				},
+				{
+					"name": "Recargar Saldo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cardId\": \"1234567403476912\",\r\n    \"balance\": 1000.00\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/card/balance",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"card",
+								"balance"
+							]
+						},
+						"description": "Metodo que permite cargar saldo a una tarjeta"
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta Saldo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/card/balance/1234567403476912",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"card",
+								"balance",
+								"1234567403476912"
+							]
+						},
+						"description": "Metodo que permite la consulta de saldo"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transaccion",
+			"item": [
+				{
+					"name": "Realizar compra",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cardId\": \"1234567403476912\",\r\n    \"price\": 100.00\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/transaction/purchase",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"transaction",
+								"purchase"
+							]
+						},
+						"description": "Metodo que permite realizar una compra"
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar Transaccion",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/transaction/f51ba685-f9d9-4e0a-8c27-d0ee4276cbb3",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"transaction",
+								"f51ba685-f9d9-4e0a-8c27-d0ee4276cbb3"
+							]
+						},
+						"description": "Metodo que permite consultar transaccion"
+					},
+					"response": []
+				},
+				{
+					"name": "Anular transaccion",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cardId\": \"1234567403476912\",\r\n    \"transactionId\": \"abc123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/transaction/anulation",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"transaction",
+								"anulation"
+							]
+						},
+						"description": "Metodo que permite anular una transaccion"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}

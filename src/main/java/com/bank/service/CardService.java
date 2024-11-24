@@ -20,6 +20,12 @@ public class CardService {
     private final CardRepository cardRepository;
     private final CardMapper cardMapper;
 
+    public Double checkBalance(String cardId) {
+        Card card = findCard(cardId);
+        validateActiveCard(card);
+        return card.getBalance();
+    }
+
     public String generateCardNumber(String productId) {
         StringBuilder cardNumber = new StringBuilder(productId);
         while (cardNumber.length() < 16) {
@@ -59,17 +65,30 @@ public class CardService {
 
     @Transactional
     public void rechargeBalance(CardBalanceDTO balanceDTO) {
+        validateRechargeAmount(balanceDTO.getBalance());
         Card card = findCard(balanceDTO.getCardId());
-        if (card.getIsBlocked()) {
-            throw new InvalidOperationException("Card is blocked");
-        }
+        validateCard(card);
+        
         card.setBalance(card.getBalance() + balanceDTO.getBalance());
         cardRepository.save(card);
     }
 
-    public Double checkBalance(String cardId) {
-        return findCard(cardId).getBalance();
+    private void validateRechargeAmount(Double amount) {
+        if (amount == null || amount <= 0) {
+            throw new InvalidOperationException("Balance must be greater than zero");
+        }
     }
+
+    private void validateCard(Card card) {
+        if (!card.getIsActive()) {
+            throw new InvalidOperationException("Card is not active");
+        }
+        if (card.getIsBlocked()) {
+            throw new InvalidOperationException("Card is blocked");
+        }
+    }
+
+    
 
     public Card findCard(String cardId) {
         return cardRepository.findById(cardId)
@@ -82,4 +101,12 @@ public class CardService {
                card.getBalance() >= amount &&
                card.getExpirationDate().isAfter(LocalDateTime.now());
     }
+
+    private void validateActiveCard(Card card) {
+        if (!card.getIsActive()) {
+            throw new InvalidOperationException("Card is not active");
+        }
+    }
+
+    
 }
